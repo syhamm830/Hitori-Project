@@ -1,0 +1,122 @@
+/* Styles principaux */
+.root {
+    -fx-font-family: "Arial";
+    -fx-background-color: linear-gradient(to bottom, #f0f8ff, #a0d8ef);
+    -fx-padding: 20px;
+}
+
+/* Titre du jeu */
+.label-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+    -fx-padding: 10px 0;
+}
+
+/* Timer */
+.timer-label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e74c3c;
+    -fx-padding: 5px 0 20px 0;
+}
+
+/* Boutons des cases */
+.button {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-width: 2px;
+    -fx-border-color: #34495e;
+    -fx-cursor: hand;
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+.button:hover {
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+    -fx-border-color: #3498db;
+}
+
+/* Cases blanches */
+.button:default {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #2c3e50;
+}
+
+/* Cases noires */
+.button:armed, .black-cell {
+    -fx-background-color: #2c3e50;
+    -fx-text-fill: #ffffff;
+}
+
+/* Boutons du menu et actions */
+.button-check, .button-restart, .button-back {
+    -fx-background-color: #3498db;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 15px;
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-border-width: 2px;
+    -fx-border-color: #2980b9;
+    -fx-cursor: hand;
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+.button-check:hover, .button-restart:hover, .button-back:hover {
+    -fx-background-color: #2980b9;
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+/* Scores */
+.label-score {
+    -fx-font-size: 16px;
+    -fx-text-fill: #2c3e50;
+}
+
+/* Grid spacing */
+.grid-pane {
+    -fx-hgap: 5px;
+    -fx-vgap: 5px;
+    -fx-alignment: center;
+}
+
+/* Animation sur case noire/blanche */
+.black-cell {
+    -fx-background-color: #2c3e50;
+    -fx-text-fill: #ffffff;
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+.white-cell {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #2c3e50;
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+.button.black-cell:hover {
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+    -fx-background-color: #34495e;
+}
+
+.button.white-cell:hover {
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+    -fx-background-color: #ecf0f1;
+}
+
+/* Alertes */
+.dialog-pane {
+    -fx-font-size: 14px;
+    -fx-background-color: #ecf0f1;
+    -fx-border-color: #3498db;
+    -fx-border-width: 2px;
+}

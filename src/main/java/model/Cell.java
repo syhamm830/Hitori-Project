@@ -6,10 +6,12 @@ public class Cell {
 
     private final int value;
     private State state;
+    private boolean playable; // nouvelle propriété
 
     public Cell(int value) {
         this.value = value;
         this.state = State.WHITE;
+        this.playable = (value == 0); // case 0 = jouable
     }
 
     public int getValue() {
@@ -18,6 +20,10 @@ public class Cell {
 
     public State getState() {
         return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
     }
 
     public boolean isWhite() {
@@ -29,11 +35,17 @@ public class Cell {
     }
 
     public void toggleState() {
-        state = (state == State.WHITE) ? State.BLACK : State.WHITE;
+        if (playable) {
+            state = (state == State.WHITE) ? State.BLACK : State.WHITE;
+        }
+    }
+
+    public boolean isPlayable() {
+        return playable;
     }
 
     @Override
     public String toString() {
-        return isWhite() ? String.valueOf(value) : "X";
+        return isBlack() ? "X" : (playable ? " " : String.valueOf(value));
     }
 }

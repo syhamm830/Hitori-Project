@@ -4,20 +4,15 @@ import exception.InvalidMoveException;
 import model.Cell;
 import model.Grid;
 import util.FileUtils;
-import util.TimerUtil;
 
 public class HitoriGame {
 
     private Grid grid;
-    private TimerUtil timer;
 
-    public HitoriGame() {
-        timer = new TimerUtil();
-    }
+    public HitoriGame() {}
 
-    public void loadGrid(String path) throws Exception {
-        this.grid = FileUtils.loadGridFromFile(path);
-        timer.start();
+    public void loadGrid(String level) throws Exception {
+        this.grid = FileUtils.loadGridFromFile(level);
     }
 
     public Grid getGrid() {
@@ -26,13 +21,15 @@ public class HitoriGame {
 
     public void toggleCell(int row, int col) throws InvalidMoveException {
         Cell cell = grid.getCell(row, col);
-        cell.toggle();
-        validateMove(row, col);
-    }
-
-    private void validateMove(int row, int col) throws InvalidMoveException {
-        if (!grid.isMoveValid(row, col)) {
-            throw new InvalidMoveException("Coup invalide : règles Hitori violées !");
+        // Seules les cases jouables (0 dans le fichier) peuvent être modifiées
+        if (cell.getValue() == 0) {
+            cell.toggleState();
+            if (!grid.isMoveValid(row, col)) {
+                cell.toggleState(); // annuler le coup
+                throw new InvalidMoveException("Coup invalide : règles Hitori violées !");
+            }
+        } else {
+            throw new InvalidMoveException("Cette case est fixe et ne peut pas être modifiée !");
         }
     }
 
@@ -40,11 +37,15 @@ public class HitoriGame {
         return grid.isValid() && grid.areAllWhiteCellsConnected();
     }
 
-    public void stopTimer() {
-        timer.stop();
-    }
-
-    public int getElapsedTime() {
-        return timer.getElapsedSeconds();
+    public void resetGrid() {
+        if (grid != null) {
+            for (int i = 0; i < grid.getSize(); i++)
+                for (int j = 0; j < grid.getSize(); j++) {
+                    Cell cell = grid.getCell(i, j);
+                    if (cell.getValue() == 0) {
+                        cell.setState(Cell.State.WHITE);
+                    }
+                }
+        }
     }
 }

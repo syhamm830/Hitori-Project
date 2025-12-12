@@ -11,8 +11,15 @@ public class TimerUtil {
     private int secondsElapsed;
     private Label timerLabel;
 
+    // Constructeur avec Label
     public TimerUtil(Label timerLabel) {
         this.timerLabel = timerLabel;
+        this.secondsElapsed = 0;
+    }
+
+    // Constructeur par défaut
+    public TimerUtil() {
+        this.timerLabel = null;
         this.secondsElapsed = 0;
     }
 
@@ -31,7 +38,7 @@ public class TimerUtil {
         }
     }
 
-    public int getSecondsElapsed() {
+    public int getElapsedSeconds() {
         return secondsElapsed;
     }
 
@@ -42,8 +49,10 @@ public class TimerUtil {
     }
 
     private void updateLabel() {
-        int minutes = secondsElapsed / 60;
-        int seconds = secondsElapsed % 60;
-        timerLabel.setText(String.format("%02d:%02d", minutes, seconds));
+        if (timerLabel != null) {
+            int minutes = secondsElapsed / 60;
+            int seconds = secondsElapsed % 60;
+            timerLabel.setText(String.format("%02d:%02d", minutes, seconds));
+        }
     }
 }

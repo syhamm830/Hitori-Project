@@ -9,4 +9,5 @@ controller/HitoriGame.class
 app/Main.class
 ui/LevelSelectorUI.class
 ui/ScoreBoardUI.class
+util/FileUtils$GameState.class
 model/Grid.class

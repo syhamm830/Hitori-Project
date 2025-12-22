@@ -1,453 +1,347 @@
 /* ================================
-   PALETTE DE COULEURS MODERNE
+   PALETTE CLAIRE ET MODERNE
    ================================ */
-:root {
-    --primary: #6366f1;
-    --primary-dark: #4f46e5;
-    --secondary: #8b5cf6;
-    --accent: #ec4899;
-    --success: #10b981;
-    --warning: #f59e0b;
-    --danger: #ef4444;
-    
-    --bg-light: #f8fafc;
-    --bg-card-light: rgba(255, 255, 255, 0.9);
-    --text-light: #1e293b;
-    --text-secondary-light: #64748b;
-    
-    --bg-dark: #0f172a;
-    --bg-card-dark: rgba(30, 41, 59, 0.9);
-    --text-dark: #f1f5f9;
-    --text-secondary-dark: #94a3b8;
-}
 
 /* ================================
-   MODE CLAIR (par défaut)
+   BACKGROUNDS PRINCIPAUX
    ================================ */
 .game-root {
-    -fx-background-color: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 20, 0, 0, 10);
+    -fx-background-color: linear-gradient(to bottom right, #f0f4f8, #d9e2ec);
 }
 
-.game-root.light-mode {
-    -fx-background-color: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.selector-root {
+    -fx-background-color: linear-gradient(to bottom right, #e0e7ff, #c7d2fe);
 }
 
-.game-root.dark-mode {
-    -fx-background-color: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+.scoreboard-root {
+    -fx-background-color: linear-gradient(to bottom right, #fef3c7, #fde68a);
 }
 
 /* ================================
-   TITRE ET EN-TÊTE
+   TITRES ET EN-TÊTES
    ================================ */
 .game-title {
-    -fx-font-family: 'Segoe UI', 'Arial', sans-serif;
-    -fx-font-size: 48px;
-    -fx-font-weight: 900;
-    -fx-text-fill: linear-gradient(to right, #ffffff, #e0e7ff);
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 15, 0.5, 0, 5);
-    -fx-letter-spacing: 3px;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 42px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #4338ca;
+    -fx-effect: dropshadow(gaussian, rgba(67, 56, 202, 0.3), 10, 0.5, 0, 4);
 }
 
 .game-subtitle {
-    -fx-font-family: 'Segoe UI', sans-serif;
-    -fx-font-size: 20px;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 18px;
     -fx-font-weight: 600;
-    -fx-text-fill: #e0e7ff;
-    -fx-opacity: 0.95;
-    -fx-letter-spacing: 1px;
+    -fx-text-fill: #64748b;
 }
 
+.selector-title {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 52px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #4338ca;
+    -fx-effect: dropshadow(gaussian, rgba(67, 56, 202, 0.4), 15, 0.6, 0, 6);
+}
+
+.selector-subtitle {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 22px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #475569;
+}
+
+.selector-footer {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+    -fx-text-fill: #94a3b8;
+    -fx-font-style: italic;
+}
+
+/* ================================
+   STATS BAR
+   ================================ */
 .stats-bar {
-    -fx-background-color: rgba(255, 255, 255, 0.15);
-    -fx-background-radius: 25px;
-    -fx-padding: 15px 40px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0, 0, 3);
-    -fx-border-color: rgba(255, 255, 255, 0.3);
-    -fx-border-width: 1px;
-    -fx-border-radius: 25px;
+    -fx-background-color: white;
+    -fx-background-radius: 15px;
+    -fx-padding: 12px 35px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 12, 0, 0, 4);
+    -fx-border-color: #cbd5e1;
+    -fx-border-width: 2px;
+    -fx-border-radius: 15px;
 }
 
 .stat-label {
-    -fx-font-family: 'Segoe UI', sans-serif;
-    -fx-font-size: 18px;
-    -fx-font-weight: 700;
-    -fx-text-fill: #ffffff;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0, 0, 2);
+    -fx-font-family: "Consolas", "Courier New", monospace;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #4338ca;
 }
 
 /* ================================
-   CONTENEUR DE GRILLE
+   CONTENEURS
    ================================ */
 .grid-container {
-    -fx-background-color: rgba(255, 255, 255, 0.1);
-    -fx-background-radius: 30px;
+    -fx-background-color: white;
+    -fx-background-radius: 20px;
     -fx-padding: 30px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 20, 0, 0, 10);
-    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 20, 0, 0, 8);
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 3px;
+    -fx-border-radius: 20px;
+}
+
+.level-container {
+    -fx-background-color: rgba(255, 255, 255, 0.7);
+    -fx-background-radius: 25px;
+    -fx-padding: 35px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 15, 0, 0, 6);
+    -fx-border-color: #cbd5e1;
     -fx-border-width: 2px;
-    -fx-border-radius: 30px;
+    -fx-border-radius: 25px;
 }
 
-.game-root.dark-mode .grid-container {
-    -fx-background-color: rgba(30, 41, 59, 0.6);
-    -fx-border-color: rgba(255, 255, 255, 0.1);
+.scores-container {
+    -fx-background-color: white;
+    -fx-background-radius: 20px;
+    -fx-padding: 25px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 20, 0, 0, 8);
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 3px;
+    -fx-border-radius: 20px;
+    -fx-min-width: 600px;
 }
 
-.game-grid {
-    -fx-padding: 10px;
+.controls-bar {
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+    -fx-background-radius: 18px;
+    -fx-padding: 15px 25px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0, 0, 4);
+    -fx-border-color: #cbd5e1;
+    -fx-border-width: 2px;
+    -fx-border-radius: 18px;
 }
 
 /* ================================
-   BOUTONS DE CELLULE
+   CELLULES DE GRILLE
    ================================ */
 .button {
-    -fx-font-family: 'Segoe UI', sans-serif;
-    -fx-font-size: 20px;
-    -fx-font-weight: 800;
-    -fx-background-radius: 12px;
-    -fx-border-radius: 12px;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
     -fx-cursor: hand;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 8, 0, 0, 3);
-    -fx-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Case blanche (fixe avec valeur) */
+/* Case blanche (valeur visible) */
 .button.white-cell {
-    -fx-background-color: linear-gradient(145deg, #ffffff, #f1f5f9);
+    -fx-background-color: linear-gradient(to bottom, #ffffff, #f8fafc);
     -fx-text-fill: #1e293b;
     -fx-border-color: #cbd5e1;
     -fx-border-width: 2px;
 }
 
 .button.white-cell:hover {
-    -fx-background-color: linear-gradient(145deg, #f8fafc, #e2e8f0);
+    -fx-background-color: linear-gradient(to bottom, #f1f5f9, #e2e8f0);
+    -fx-border-color: #94a3b8;
+    -fx-border-width: 3px;
     -fx-scale-x: 1.05;
     -fx-scale-y: 1.05;
-}
-
-/* Case jouable (vide) */
-.button.playable-cell {
-    -fx-background-color: linear-gradient(145deg, #ddd6fe, #c4b5fd);
-    -fx-border-color: #8b5cf6;
-    -fx-border-width: 2px;
-    -fx-effect: dropshadow(gaussian, rgba(139, 92, 246, 0.4), 12, 0, 0, 3);
-}
-
-.button.playable-cell:hover {
-    -fx-background-color: linear-gradient(145deg, #c4b5fd, #a78bfa);
-    -fx-scale-x: 1.1;
-    -fx-scale-y: 1.1;
-    -fx-effect: dropshadow(gaussian, rgba(139, 92, 246, 0.6), 15, 0, 0, 5);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0, 0, 4);
 }
 
 /* Case noire (noircie par le joueur) */
 .button.black-cell {
-    -fx-background-color: linear-gradient(145deg, #1e293b, #0f172a);
-    -fx-text-fill: #6366f1;
-    -fx-border-color: #6366f1;
+    -fx-background-color: linear-gradient(to bottom, #1e293b, #0f172a);
+    -fx-text-fill: #ffffff;
+    -fx-border-color: #475569;
     -fx-border-width: 3px;
-    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.5), 15, 0, 0, 5);
-    -fx-font-size: 24px;
+    -fx-effect: dropshadow(gaussian, rgba(30, 41, 59, 0.5), 12, 0, 0, 5);
+    -fx-font-size: 28px;
 }
 
 .button.black-cell:hover {
-    -fx-background-color: linear-gradient(145deg, #334155, #1e293b);
-    -fx-scale-x: 1.08;
-    -fx-scale-y: 1.08;
-    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.7), 18, 0, 0, 6);
-}
-
-/* Case fixe (non jouable) */
-.button.fixed-cell {
-    -fx-opacity: 1.0;
-    -fx-background-color: linear-gradient(145deg, #fafafa, #e5e7eb);
-    -fx-text-fill: #374151;
-    -fx-border-color: #d1d5db;
-    -fx-border-width: 2px;
+    -fx-background-color: linear-gradient(to bottom, #334155, #1e293b);
+    -fx-border-color: #64748b;
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-effect: dropshadow(gaussian, rgba(30, 41, 59, 0.7), 15, 0, 0, 6);
 }
 
 /* ================================
    BOUTONS DE CONTRÔLE
    ================================ */
-.controls-bar {
-    -fx-background-color: rgba(255, 255, 255, 0.1);
-    -fx-background-radius: 20px;
-    -fx-padding: 15px 25px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0, 0, 5);
-    -fx-border-color: rgba(255, 255, 255, 0.2);
-    -fx-border-width: 1px;
-    -fx-border-radius: 20px;
-}
-
 .game-button {
-    -fx-font-family: 'Segoe UI', sans-serif;
+    -fx-font-family: "Segoe UI", sans-serif;
     -fx-font-size: 14px;
-    -fx-font-weight: 700;
-    -fx-padding: 12px 24px;
-    -fx-background-radius: 15px;
-    -fx-border-radius: 15px;
+    -fx-font-weight: bold;
+    -fx-padding: 11px 22px;
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0, 0, 3);
-    -fx-transition: all 0.2s ease;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 8, 0, 0, 3);
 }
 
 .check-button {
-    -fx-background-color: linear-gradient(145deg, #10b981, #059669);
+    -fx-background-color: linear-gradient(to bottom, #10b981, #059669);
     -fx-text-fill: white;
     -fx-border-color: #047857;
     -fx-border-width: 2px;
 }
 
 .check-button:hover {
-    -fx-background-color: linear-gradient(145deg, #059669, #047857);
-    -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.5), 12, 0, 0, 5);
+    -fx-background-color: linear-gradient(to bottom, #059669, #047857);
+    -fx-border-color: #10b981;
+    -fx-border-width: 3px;
+    -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.4), 12, 0, 0, 5);
 }
 
 .hint-button {
-    -fx-background-color: linear-gradient(145deg, #f59e0b, #d97706);
+    -fx-background-color: linear-gradient(to bottom, #f59e0b, #d97706);
     -fx-text-fill: white;
     -fx-border-color: #b45309;
     -fx-border-width: 2px;
 }
 
 .hint-button:hover {
-    -fx-background-color: linear-gradient(145deg, #d97706, #b45309);
-    -fx-effect: dropshadow(gaussian, rgba(245, 158, 11, 0.5), 12, 0, 0, 5);
+    -fx-background-color: linear-gradient(to bottom, #d97706, #b45309);
+    -fx-border-color: #fbbf24;
+    -fx-border-width: 3px;
+    -fx-effect: dropshadow(gaussian, rgba(245, 158, 11, 0.4), 12, 0, 0, 5);
 }
 
 .restart-button {
-    -fx-background-color: linear-gradient(145deg, #6366f1, #4f46e5);
+    -fx-background-color: linear-gradient(to bottom, #3b82f6, #2563eb);
     -fx-text-fill: white;
-    -fx-border-color: #4338ca;
+    -fx-border-color: #1d4ed8;
     -fx-border-width: 2px;
 }
 
 .restart-button:hover {
-    -fx-background-color: linear-gradient(145deg, #4f46e5, #4338ca);
-    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.5), 12, 0, 0, 5);
+    -fx-background-color: linear-gradient(to bottom, #2563eb, #1d4ed8);
+    -fx-border-color: #3b82f6;
+    -fx-border-width: 3px;
+    -fx-effect: dropshadow(gaussian, rgba(59, 130, 246, 0.4), 12, 0, 0, 5);
 }
 
-.theme-button {
-    -fx-background-color: linear-gradient(145deg, #8b5cf6, #7c3aed);
+.save-button {
+    -fx-background-color: linear-gradient(to bottom, #8b5cf6, #7c3aed);
     -fx-text-fill: white;
     -fx-border-color: #6d28d9;
     -fx-border-width: 2px;
 }
 
-.theme-button:hover {
-    -fx-background-color: linear-gradient(145deg, #7c3aed, #6d28d9);
-    -fx-effect: dropshadow(gaussian, rgba(139, 92, 246, 0.5), 12, 0, 0, 5);
+.save-button:hover {
+    -fx-background-color: linear-gradient(to bottom, #7c3aed, #6d28d9);
+    -fx-border-color: #8b5cf6;
+    -fx-border-width: 3px;
+    -fx-effect: dropshadow(gaussian, rgba(139, 92, 246, 0.4), 12, 0, 0, 5);
 }
 
 .back-button {
-    -fx-background-color: linear-gradient(145deg, #64748b, #475569);
+    -fx-background-color: linear-gradient(to bottom, #64748b, #475569);
     -fx-text-fill: white;
     -fx-border-color: #334155;
     -fx-border-width: 2px;
 }
 
 .back-button:hover {
-    -fx-background-color: linear-gradient(145deg, #475569, #334155);
-    -fx-effect: dropshadow(gaussian, rgba(100, 116, 139, 0.5), 12, 0, 0, 5);
+    -fx-background-color: linear-gradient(to bottom, #475569, #334155);
+    -fx-border-color: #64748b;
+    -fx-border-width: 3px;
+    -fx-effect: dropshadow(gaussian, rgba(100, 116, 139, 0.4), 12, 0, 0, 5);
 }
 
 /* ================================
-   MODE SOMBRE
+   TABLEAU DES SCORES
    ================================ */
-.game-root.dark-mode .game-title {
-    -fx-text-fill: linear-gradient(to right, #a78bfa, #c4b5fd);
+.scoreboard-title {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 38px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f59e0b;
+    -fx-effect: dropshadow(gaussian, rgba(245, 158, 11, 0.3), 10, 0.5, 0, 4);
 }
 
-.game-root.dark-mode .game-subtitle {
-    -fx-text-fill: #c4b5fd;
+.scoreboard-subtitle {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #64748b;
 }
 
-.game-root.dark-mode .stats-bar {
-    -fx-background-color: rgba(30, 41, 59, 0.5);
-    -fx-border-color: rgba(139, 92, 246, 0.3);
+.score-row {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 12px;
+    -fx-padding: 14px 22px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 8, 0, 0, 3);
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 2px;
+    -fx-border-radius: 12px;
 }
 
-.game-root.dark-mode .button.white-cell {
-    -fx-background-color: linear-gradient(145deg, #475569, #334155);
-    -fx-text-fill: #f1f5f9;
-    -fx-border-color: #64748b;
+.score-row.current-score-row {
+    -fx-background-color: rgba(16, 185, 129, 0.1);
+    -fx-border-color: #10b981;
+    -fx-border-width: 3px;
+    -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.3), 12, 0, 0, 5);
 }
 
-.game-root.dark-mode .button.playable-cell {
-    -fx-background-color: linear-gradient(145deg, #4c1d95, #5b21b6);
-    -fx-border-color: #a78bfa;
+.score-time-label {
+    -fx-font-family: "Consolas", "Courier New", monospace;
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #4338ca;
+}
+
+.new-score-label {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #10b981;
+    -fx-background-color: rgba(16, 185, 129, 0.15);
+    -fx-padding: 5px 12px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: #10b981;
+    -fx-border-width: 2px;
+}
+
+.empty-scores-label {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 17px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #94a3b8;
+    -fx-font-style: italic;
+    -fx-padding: 35px;
 }
 
 /* ================================
    ALERTES ET DIALOGUES
    ================================ */
 .dialog-pane {
-    -fx-background-color: linear-gradient(145deg, #ffffff, #f8fafc);
-    -fx-border-color: #6366f1;
+    -fx-background-color: white;
+    -fx-border-color: #4338ca;
     -fx-border-width: 3px;
-    -fx-border-radius: 20px;
-    -fx-background-radius: 20px;
+    -fx-border-radius: 18px;
+    -fx-background-radius: 18px;
     -fx-padding: 20px;
-    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.3), 20, 0, 0, 10);
+    -fx-effect: dropshadow(gaussian, rgba(67, 56, 202, 0.2), 20, 0, 0, 8);
 }
 
 .dialog-pane .label {
-    -fx-font-family: 'Segoe UI', sans-serif;
-    -fx-font-size: 16px;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 15px;
     -fx-text-fill: #1e293b;
 }
 
 .dialog-pane .button {
-    -fx-background-color: linear-gradient(145deg, #6366f1, #4f46e5);
+    -fx-background-color: linear-gradient(to bottom, #4338ca, #3730a3);
     -fx-text-fill: white;
-    -fx-font-weight: 700;
+    -fx-font-weight: bold;
     -fx-padding: 10px 20px;
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;
-}
-
-/* ================================
-   ANIMATIONS
-   ================================ */
-@keyframes pulse {
-    0%, 100% { -fx-scale-x: 1; -fx-scale-y: 1; }
-    50% { -fx-scale-x: 1.05; -fx-scale-y: 1.05; }
-}
-
-@keyframes glow {
-    0%, 100% { -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.3), 10, 0, 0, 3); }
-    50% { -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.7), 20, 0, 0, 6); }
-}
-
-@keyframes shake {
-    0%, 100% { -fx-translate-x: 0; }
-    25% { -fx-translate-x: -5px; }
-    75% { -fx-translate-x: 5px; }
-}
-
-/* ================================
-   ÉCRAN DE SÉLECTION DE NIVEAU
-   ================================ */
-.selector-root {
-    -fx-background-color: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-.selector-title {
-    -fx-font-family: 'Segoe UI', 'Arial', sans-serif;
-    -fx-font-size: 56px;
-    -fx-font-weight: 900;
-    -fx-text-fill: linear-gradient(to right, #ffffff, #e0e7ff);
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 20, 0.5, 0, 8);
-    -fx-letter-spacing: 5px;
-}
-
-.selector-subtitle {
-    -fx-font-family: 'Segoe UI', sans-serif;
-    -fx-font-size: 24px;
-    -fx-font-weight: 600;
-    -fx-text-fill: #e0e7ff;
-    -fx-opacity: 0.95;
-    -fx-letter-spacing: 2px;
-}
-
-.selector-footer {
-    -fx-font-family: 'Segoe UI', sans-serif;
-    -fx-font-size: 14px;
-    -fx-font-weight: 600;
-    -fx-text-fill: rgba(255, 255, 255, 0.7);
-    -fx-font-style: italic;
-}
-
-.level-container {
-    -fx-background-color: rgba(255, 255, 255, 0.08);
-    -fx-background-radius: 30px;
-    -fx-padding: 40px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 20, 0, 0, 10);
-    -fx-border-color: rgba(255, 255, 255, 0.2);
-    -fx-border-width: 2px;
-    -fx-border-radius: 30px;
-}
-
-/* ================================
-   TABLEAU DES SCORES
-   ================================ */
-.scoreboard-root {
-    -fx-background-color: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-.scoreboard-title {
-    -fx-font-family: 'Segoe UI', 'Arial', sans-serif;
-    -fx-font-size: 42px;
-    -fx-font-weight: 900;
-    -fx-text-fill: linear-gradient(to right, #ffffff, #e0e7ff);
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 15, 0.5, 0, 5);
-    -fx-letter-spacing: 4px;
-}
-
-.scoreboard-subtitle {
-    -fx-font-family: 'Segoe UI', sans-serif;
-    -fx-font-size: 18px;
-    -fx-font-weight: 600;
-    -fx-text-fill: #e0e7ff;
-    -fx-opacity: 0.95;
-    -fx-letter-spacing: 1px;
-}
-
-.scores-container {
-    -fx-background-color: rgba(255, 255, 255, 0.1);
-    -fx-background-radius: 25px;
-    -fx-padding: 30px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 20, 0, 0, 10);
-    -fx-border-color: rgba(255, 255, 255, 0.2);
-    -fx-border-width: 2px;
-    -fx-border-radius: 25px;
-    -fx-min-width: 600px;
-}
-
-.score-row {
-    -fx-background-color: rgba(255, 255, 255, 0.15);
-    -fx-background-radius: 15px;
-    -fx-padding: 15px 25px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0, 0, 3);
-    -fx-border-color: rgba(255, 255, 255, 0.3);
-    -fx-border-width: 2px;
-    -fx-border-radius: 15px;
-}
-
-.score-row.current-score-row {
-    -fx-background-color: rgba(16, 185, 129, 0.25);
-    -fx-border-color: #10b981;
-    -fx-border-width: 3px;
-    -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.5), 15, 0, 0, 5);
-}
-
-.score-time-label {
-    -fx-font-family: 'Segoe UI', 'Consolas', monospace;
-    -fx-font-size: 28px;
-    -fx-font-weight: 900;
-    -fx-text-fill: white;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 0, 2);
-}
-
-.new-score-label {
-    -fx-font-family: 'Segoe UI', sans-serif;
-    -fx-font-size: 14px;
-    -fx-font-weight: 900;
-    -fx-text-fill: #10b981;
-    -fx-background-color: rgba(16, 185, 129, 0.2);
-    -fx-padding: 5px 12px;
-    -fx-background-radius: 10px;
-    -fx-border-radius: 10px;
-    -fx-border-color: #10b981;
-    -fx-border-width: 2px;
-}
-
-.empty-scores-label {
-    -fx-font-family: 'Segoe UI', sans-serif;
-    -fx-font-size: 18px;
-    -fx-font-weight: 600;
-    -fx-text-fill: rgba(255, 255, 255, 0.8);
-    -fx-font-style: italic;
-    -fx-padding: 40px;
 }

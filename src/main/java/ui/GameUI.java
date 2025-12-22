@@ -3,16 +3,13 @@ package ui;
 import controller.HitoriGame;
 import exception.InvalidMoveException;
 import javafx.animation.*;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Glow;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -26,6 +23,7 @@ import java.util.Random;
 
 public class GameUI {
 
+    private boolean victoryShown = false;
     private HitoriGame game;
     private GridPane gridPane;
     private Label timerLabel;
@@ -34,7 +32,6 @@ public class GameUI {
     private int seconds = 0;
     private int moveCount = 0;
     private Button[][] buttonGrid;
-    private boolean darkMode = false;
     private VBox root;
     private Pane particlePane;
 
@@ -42,24 +39,24 @@ public class GameUI {
         this.game = game;
     }
 
+    public GameUI(HitoriGame game, int savedSeconds, int savedMoves) {
+        this.game = game;
+        this.seconds = savedSeconds;
+        this.moveCount = savedMoves;
+    }
+
     public void show(Stage stage) {
-        stage.setTitle("✨ Hitori - Puzzle Élégant");
+        stage.setTitle("🎯 Hitori - Puzzle Logique");
 
         root = new VBox(20);
         root.setAlignment(Pos.CENTER);
         root.setPadding(new Insets(30));
         root.getStyleClass().add("game-root");
 
-        // En-tête avec titre et stats
         VBox header = createHeader();
-
-        // Grille de jeu avec effet glassmorphism
         VBox gridContainer = createGridContainer();
-
-        // Contrôles du jeu
         HBox controls = createControls(stage);
 
-        // Pane pour les particules (overlay)
         particlePane = new Pane();
         particlePane.setMouseTransparent(true);
 
@@ -71,22 +68,27 @@ public class GameUI {
 
         root.getChildren().add(mainContent);
 
-        Scene scene = new Scene(root, 800, 900);
-        scene.getStylesheets().add(getClass().getResource("/styles/game.css").toExternalForm());
+        Scene scene = new Scene(root);
+        
+        try {
+            String css = getClass().getResource("/styles/game.css").toExternalForm();
+            scene.getStylesheets().add(css);
+        } catch (Exception e) {
+            System.err.println("❌ CSS non trouvé !");
+            e.printStackTrace();
+        }
         
         stage.setScene(scene);
         stage.show();
 
         startTimer();
-        updateTheme();
     }
 
     private VBox createHeader() {
         VBox header = new VBox(15);
         header.setAlignment(Pos.CENTER);
 
-        // Titre avec animation de pulsation
-        Label title = new Label("✨ H I T O R I ✨");
+        Label title = new Label("🎯 H I T O R I");
         title.getStyleClass().add("game-title");
         
         ScaleTransition pulse = new ScaleTransition(Duration.seconds(2), title);
@@ -98,11 +100,9 @@ public class GameUI {
         pulse.setAutoReverse(true);
         pulse.play();
 
-        // Sous-titre avec niveau
         Label subtitle = new Label("Grille " + game.getGrid().getSize() + "×" + game.getGrid().getSize());
         subtitle.getStyleClass().add("game-subtitle");
 
-        // Stats bar
         HBox statsBar = new HBox(40);
         statsBar.setAlignment(Pos.CENTER);
         statsBar.getStyleClass().add("stats-bar");
@@ -125,10 +125,9 @@ public class GameUI {
         container.getStyleClass().add("grid-container");
 
         gridPane = new GridPane();
-        gridPane.setHgap(8);
-        gridPane.setVgap(8);
+        gridPane.setHgap(6);
+        gridPane.setVgap(6);
         gridPane.setAlignment(Pos.CENTER);
-        gridPane.getStyleClass().add("game-grid");
 
         drawGrid();
 
@@ -137,26 +136,26 @@ public class GameUI {
     }
 
     private HBox createControls(Stage stage) {
-        HBox controls = new HBox(20);
+        HBox controls = new HBox(15);
         controls.setAlignment(Pos.CENTER);
         controls.getStyleClass().add("controls-bar");
 
         Button checkButton = createStyledButton("✓ Vérifier", "check-button");
         Button hintButton = createStyledButton("💡 Indice", "hint-button");
+        Button saveButton = createStyledButton("💾 Sauvegarder", "save-button");
         Button restartButton = createStyledButton("↻ Recommencer", "restart-button");
-        Button themeButton = createStyledButton("🌙 Thème", "theme-button");
         Button backButton = createStyledButton("← Retour", "back-button");
 
         checkButton.setOnAction(e -> checkGameWithAnimation());
         hintButton.setOnAction(e -> showHint());
+        saveButton.setOnAction(e -> saveGame());
         restartButton.setOnAction(e -> restartGame());
-        themeButton.setOnAction(e -> toggleTheme());
         backButton.setOnAction(e -> {
             timeline.stop();
             new ui.LevelSelectorUI(game).show(stage);
         });
 
-        controls.getChildren().addAll(checkButton, hintButton, restartButton, themeButton, backButton);
+        controls.getChildren().addAll(checkButton, hintButton, saveButton, restartButton, backButton);
         return controls;
     }
 
@@ -164,7 +163,6 @@ public class GameUI {
         Button button = new Button(text);
         button.getStyleClass().addAll("game-button", styleClass);
         
-        // Effet de hover animé
         button.setOnMouseEntered(e -> {
             ScaleTransition st = new ScaleTransition(Duration.millis(100), button);
             st.setToX(1.1);
@@ -200,7 +198,7 @@ public class GameUI {
     private Button createCellButton(Cell cell, int row, int col) {
         Button btn = new Button();
         int size = game.getGrid().getSize();
-        int cellSize = Math.max(50, 70 - size * 5);
+        int cellSize = Math.max(55, 75 - size * 5);
         btn.setPrefSize(cellSize, cellSize);
         btn.setMinSize(cellSize, cellSize);
         btn.setMaxSize(cellSize, cellSize);
@@ -210,13 +208,7 @@ public class GameUI {
         final int r = row;
         final int c = col;
 
-        if (cell.isPlayable()) {
-            btn.setDisable(false);
-            btn.setOnAction(e -> handleCellClick(btn, cell, r, c));
-        } else {
-            btn.setDisable(true);
-            btn.getStyleClass().add("fixed-cell");
-        }
+        btn.setOnAction(e -> handleCellClick(btn, cell, r, c));
 
         return btn;
     }
@@ -226,61 +218,35 @@ public class GameUI {
             game.toggleCell(row, col);
             moveCount++;
             moveCountLabel.setText("🎯 " + moveCount + " coups");
-            
-            // Animation de flip
-            animateCellFlip(btn, cell);
-            
-            // Vérifier les lignes/colonnes pour feedback visuel
-            updateRowColumnFeedback();
-            
+
+            updateCellAppearance(btn, cell);
+            animateCellFlip(btn);
+
         } catch (InvalidMoveException ex) {
-            // Animation de shake pour erreur
             shakeButton(btn);
             showError(ex.getMessage());
         }
     }
 
     private void updateCellAppearance(Button btn, Cell cell) {
-        btn.getStyleClass().removeAll("white-cell", "black-cell", "playable-cell", "fixed-cell");
+        btn.getStyleClass().removeAll("white-cell", "black-cell");
         
         if (cell.isBlack()) {
             btn.getStyleClass().add("black-cell");
             btn.setText("●");
         } else {
-            if (cell.isPlayable()) {
-                btn.getStyleClass().add("playable-cell");
-                btn.setText("");
-            } else {
-                btn.getStyleClass().add("white-cell");
-                btn.setText(String.valueOf(cell.getValue()));
-            }
-        }
-
-        // Effet de glow
-        if (cell.isPlayable() && !cell.isBlack()) {
-            DropShadow glow = new DropShadow();
-            glow.setColor(Color.web("#6366f1"));
-            glow.setRadius(10);
-            btn.setEffect(glow);
-        } else {
-            btn.setEffect(null);
+            btn.getStyleClass().add("white-cell");
+            btn.setText(String.valueOf(cell.getValue()));
         }
     }
 
-    private void animateCellFlip(Button btn, Cell cell) {
-        RotateTransition rotate = new RotateTransition(Duration.millis(300), btn);
-        rotate.setByAngle(180);
-        rotate.setCycleCount(1);
-        
+    private void animateCellFlip(Button btn) {
         ScaleTransition scale = new ScaleTransition(Duration.millis(150), btn);
-        scale.setToX(1.2);
-        scale.setToY(1.2);
+        scale.setToX(1.15);
+        scale.setToY(1.15);
         scale.setAutoReverse(true);
         scale.setCycleCount(2);
-        
-        ParallelTransition parallel = new ParallelTransition(rotate, scale);
-        parallel.setOnFinished(e -> updateCellAppearance(btn, cell));
-        parallel.play();
+        scale.play();
     }
 
     private void shakeButton(Button btn) {
@@ -292,64 +258,32 @@ public class GameUI {
         shake.play();
     }
 
-    private void updateRowColumnFeedback() {
-        int size = game.getGrid().getSize();
-        
-        for (int i = 0; i < size; i++) {
-            boolean rowValid = checkRowValid(i);
-            boolean colValid = checkColValid(i);
-            
-            for (int j = 0; j < size; j++) {
-                Button btn = buttonGrid[i][j];
-                if (btn != null && !game.getGrid().getCell(i, j).isBlack()) {
-                    if (rowValid && colValid) {
-                        btn.setStyle("-fx-border-color: #10b981; -fx-border-width: 2px;");
-                    } else {
-                        btn.setStyle("");
-                    }
-                }
-            }
-        }
-    }
-
-    private boolean checkRowValid(int row) {
-        List<Integer> values = new ArrayList<>();
-        for (int j = 0; j < game.getGrid().getSize(); j++) {
-            Cell cell = game.getGrid().getCell(row, j);
-            if (cell.isWhite() && !cell.isPlayable()) {
-                if (values.contains(cell.getValue())) return false;
-                values.add(cell.getValue());
-            }
-        }
-        return true;
-    }
-
-    private boolean checkColValid(int col) {
-        List<Integer> values = new ArrayList<>();
-        for (int i = 0; i < game.getGrid().getSize(); i++) {
-            Cell cell = game.getGrid().getCell(i, col);
-            if (cell.isWhite() && !cell.isPlayable()) {
-                if (values.contains(cell.getValue())) return false;
-                values.add(cell.getValue());
-            }
-        }
-        return true;
-    }
-
     private void checkGameWithAnimation() {
-        if (game.isGameWon()) {
+        System.out.println(game.getGrid().toString());
+        System.out.println("\n🔍 Vérification de la grille...");
+
+        if (!game.isGameWon()) {
+            showError(
+                "❌ La grille n'est pas encore complète ou contient des erreurs.\n\n" +
+                "Vérifiez :\n" +
+                "• Les doublons dans les lignes/colonnes\n" +
+                "• Les cases noires adjacentes\n" +
+                "• La connexité des cases blanches"
+            );
+            return;
+        }
+
+        if (game.isGameWon() && !victoryShown) {
+            victoryShown = true;
+            System.out.println("🎉 VICTOIRE !");
             timeline.stop();
             showVictoryAnimation();
-        } else {
-            showError("La grille n'est pas encore correcte. Continuez ! 💪");
         }
     }
 
     private void showVictoryAnimation() {
-        // Particules de célébration
         createConfetti();
         
-        // Animation de toutes les cellules
         int size = game.getGrid().getSize();
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -368,7 +302,7 @@ public class GameUI {
         }
 
         PauseTransition pause = new PauseTransition(Duration.seconds(1));
-        pause.setOnFinished(e -> showVictoryDialog());
+        pause.setOnFinished(e -> Platform.runLater(this::showVictoryDialog));
         pause.play();
     }
 
@@ -384,8 +318,9 @@ public class GameUI {
             seconds / 60, seconds % 60, moveCount
         ));
         
-        alert.showAndWait().ifPresent(response -> {
-            // Afficher le tableau des scores avec le nouveau score
+        alert.show();
+
+        alert.setOnHidden(e -> {
             Stage stage = (Stage) root.getScene().getWindow();
             ScoreBoardUI scoreBoardUI = new ScoreBoardUI(seconds);
             scoreBoardUI.show(stage);
@@ -397,13 +332,13 @@ public class GameUI {
         for (int i = 0; i < 50; i++) {
             Circle particle = new Circle(5);
             particle.setFill(Color.hsb(random.nextDouble() * 360, 0.8, 1.0));
-            particle.setLayoutX(400);
+            particle.setLayoutX(450);
             particle.setLayoutY(300);
             
             particlePane.getChildren().add(particle);
             
             TranslateTransition tt = new TranslateTransition(Duration.seconds(2 + random.nextDouble()), particle);
-            tt.setByX((random.nextDouble() - 0.5) * 600);
+            tt.setByX((random.nextDouble() - 0.5) * 700);
             tt.setByY(random.nextDouble() * 400 + 200);
             
             FadeTransition ft = new FadeTransition(Duration.seconds(2), particle);
@@ -417,29 +352,24 @@ public class GameUI {
     }
 
     private void showHint() {
-        showInfo("💡 Astuce : Cherchez les doublons dans les lignes et colonnes !");
+        showInfo("💡 Astuce : Cherchez les doublons dans les lignes et colonnes !\nNoircissez une des cases dupliquées.");
     }
 
     private void restartGame() {
         game.resetGrid();
         seconds = 0;
         moveCount = 0;
+        victoryShown = false;
         moveCountLabel.setText("🎯 0 coups");
         drawGrid();
     }
 
-    private void toggleTheme() {
-        darkMode = !darkMode;
-        updateTheme();
-    }
-
-    private void updateTheme() {
-        if (darkMode) {
-            root.getStyleClass().remove("light-mode");
-            root.getStyleClass().add("dark-mode");
-        } else {
-            root.getStyleClass().remove("dark-mode");
-            root.getStyleClass().add("light-mode");
+    private void saveGame() {
+        try {
+            util.FileUtils.saveGameState(game, seconds, moveCount);
+            showInfo("💾 Partie sauvegardée avec succès !");
+        } catch (Exception ex) {
+            showError("Erreur lors de la sauvegarde : " + ex.getMessage());
         }
     }
 
@@ -457,7 +387,7 @@ public class GameUI {
         alert.setTitle("⚠️ Attention");
         alert.setHeaderText(null);
         alert.setContentText(message);
-        alert.showAndWait();
+        alert.show();
     }
 
     private void showInfo(String message) {
@@ -465,6 +395,6 @@ public class GameUI {
         alert.setTitle("ℹ️ Information");
         alert.setHeaderText(null);
         alert.setContentText(message);
-        alert.showAndWait();
+        alert.show();
     }
 }

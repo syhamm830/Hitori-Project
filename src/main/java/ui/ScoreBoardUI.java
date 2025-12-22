@@ -22,14 +22,12 @@ public class ScoreBoardUI {
     private HitoriGame game;
     private Integer lastScore;
 
-    // Constructeur avec score (après une victoire)
     public ScoreBoardUI(int lastScore) {
         this.lastScore = lastScore;
         this.game = new HitoriGame();
         FileUtils.saveScore(lastScore);
     }
 
-    // Constructeur sans score (consultation du tableau)
     public ScoreBoardUI(HitoriGame game) {
         this.game = game;
         this.lastScore = null;
@@ -43,13 +41,8 @@ public class ScoreBoardUI {
         root.setPadding(new Insets(40));
         root.getStyleClass().add("scoreboard-root");
 
-        // En-tête avec trophée animé
         VBox header = createHeader();
-
-        // Conteneur des scores
         VBox scoresContainer = createScoresContainer();
-
-        // Bouton retour
         Button backButton = createBackButton(stage);
 
         root.getChildren().addAll(header, scoresContainer, backButton);
@@ -65,11 +58,9 @@ public class ScoreBoardUI {
         VBox header = new VBox(15);
         header.setAlignment(Pos.CENTER);
 
-        // Trophée avec animation
         Label trophy = new Label("🏆");
         trophy.setStyle("-fx-font-size: 80px;");
         
-        // Animation de rotation
         RotateTransition rotate = new RotateTransition(Duration.seconds(3), trophy);
         rotate.setFromAngle(-10);
         rotate.setToAngle(10);
@@ -77,11 +68,9 @@ public class ScoreBoardUI {
         rotate.setAutoReverse(true);
         rotate.play();
 
-        // Titre
         Label title = new Label("MEILLEURS SCORES");
         title.getStyleClass().add("scoreboard-title");
 
-        // Sous-titre
         Label subtitle = new Label(lastScore != null ? 
             "Votre temps : " + formatTime(lastScore) : 
             "Top 10 des meilleurs temps");
@@ -107,7 +96,6 @@ public class ScoreBoardUI {
                 HBox scoreRow = createScoreRow(i + 1, scores.get(i), scores.get(i).equals(lastScore));
                 container.getChildren().add(scoreRow);
                 
-                // Animation d'apparition progressive
                 FadeTransition fade = new FadeTransition(Duration.millis(300 + i * 100), scoreRow);
                 fade.setFromValue(0);
                 fade.setToValue(1);
@@ -133,7 +121,6 @@ public class ScoreBoardUI {
         if (isCurrentScore) {
             row.getStyleClass().add("current-score-row");
             
-            // Animation de pulsation pour le score actuel
             ScaleTransition pulse = new ScaleTransition(Duration.seconds(1), row);
             pulse.setFromX(1.0);
             pulse.setFromY(1.0);
@@ -144,17 +131,15 @@ public class ScoreBoardUI {
             pulse.play();
         }
 
-        // Badge de rang avec couleur selon position
         Circle badge = new Circle(25);
         String badgeColor = getRankColor(rank);
         badge.setFill(Color.web(badgeColor));
-        badge.setEffect(new DropShadow(10, Color.web(badgeColor, 0.5)));
+        badge.setEffect(new DropShadow(10, Color.web(badgeColor, 0.4)));
 
         Label rankLabel = new Label(String.valueOf(rank));
         rankLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: 900; -fx-text-fill: white;");
         StackPane badgeStack = new StackPane(badge, rankLabel);
 
-        // Médailles pour le top 3
         String medal = "";
         if (rank == 1) medal = "🥇";
         else if (rank == 2) medal = "🥈";
@@ -163,17 +148,14 @@ public class ScoreBoardUI {
         Label medalLabel = new Label(medal);
         medalLabel.setStyle("-fx-font-size: 30px;");
 
-        // Temps
         Label timeLabel = new Label(formatTime(score));
         timeLabel.getStyleClass().add("score-time-label");
 
-        // Spacer
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
         row.getChildren().addAll(badgeStack, medalLabel, timeLabel, spacer);
 
-        // Ajouter un indicateur "NOUVEAU" si c'est le score actuel
         if (isCurrentScore) {
             Label newLabel = new Label("✨ NOUVEAU");
             newLabel.getStyleClass().add("new-score-label");
@@ -185,10 +167,10 @@ public class ScoreBoardUI {
 
     private String getRankColor(int rank) {
         switch (rank) {
-            case 1: return "#f59e0b"; // Or
-            case 2: return "#94a3b8"; // Argent
-            case 3: return "#cd7f32"; // Bronze
-            default: return "#6366f1"; // Violet par défaut
+            case 1: return "#f59e0b";
+            case 2: return "#94a3b8";
+            case 3: return "#cd7f32";
+            default: return "#4338ca";
         }
     }
 
@@ -206,13 +188,13 @@ public class ScoreBoardUI {
             "-fx-font-size: 18px; " +
             "-fx-font-weight: 700; " +
             "-fx-text-fill: white; " +
-            "-fx-background-color: linear-gradient(145deg, #6366f1, #4f46e5); " +
+            "-fx-background-color: linear-gradient(145deg, #4338ca, #3730a3); " +
             "-fx-background-radius: 15px; " +
             "-fx-border-radius: 15px; " +
-            "-fx-border-color: #4338ca; " +
+            "-fx-border-color: #312e81; " +
             "-fx-border-width: 2px; " +
             "-fx-cursor: hand; " +
-            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 15, 0, 0, 5);"
+            "-fx-effect: dropshadow(gaussian, rgba(67,56,202,0.3), 15, 0, 0, 5);"
         );
 
         button.setOnMouseEntered(e -> {
@@ -225,13 +207,13 @@ public class ScoreBoardUI {
                 "-fx-font-size: 18px; " +
                 "-fx-font-weight: 700; " +
                 "-fx-text-fill: white; " +
-                "-fx-background-color: linear-gradient(145deg, #4f46e5, #4338ca); " +
+                "-fx-background-color: linear-gradient(145deg, #3730a3, #312e81); " +
                 "-fx-background-radius: 15px; " +
                 "-fx-border-radius: 15px; " +
                 "-fx-border-color: white; " +
                 "-fx-border-width: 3px; " +
                 "-fx-cursor: hand; " +
-                "-fx-effect: dropshadow(gaussian, rgba(99,102,241,0.5), 20, 0, 0, 8);"
+                "-fx-effect: dropshadow(gaussian, rgba(67,56,202,0.5), 20, 0, 0, 8);"
             );
         });
 
@@ -245,20 +227,19 @@ public class ScoreBoardUI {
                 "-fx-font-size: 18px; " +
                 "-fx-font-weight: 700; " +
                 "-fx-text-fill: white; " +
-                "-fx-background-color: linear-gradient(145deg, #6366f1, #4f46e5); " +
+                "-fx-background-color: linear-gradient(145deg, #4338ca, #3730a3); " +
                 "-fx-background-radius: 15px; " +
                 "-fx-border-radius: 15px; " +
-                "-fx-border-color: #4338ca; " +
+                "-fx-border-color: #312e81; " +
                 "-fx-border-width: 2px; " +
                 "-fx-cursor: hand; " +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 15, 0, 0, 5);"
+                "-fx-effect: dropshadow(gaussian, rgba(67,56,202,0.3), 15, 0, 0, 5);"
             );
         });
 
         button.setOnAction(e -> {
             LevelSelectorUI selector = new LevelSelectorUI(game);
             
-            // Transition avec fondu
             FadeTransition fadeOut = new FadeTransition(Duration.millis(300), stage.getScene().getRoot());
             fadeOut.setFromValue(1.0);
             fadeOut.setToValue(0.0);

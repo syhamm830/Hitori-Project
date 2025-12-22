@@ -1,5 +1,7 @@
 package util;
 
+import controller.HitoriGame;
+import model.Cell;
 import model.Grid;
 import java.io.*;
 import java.util.*;
@@ -7,19 +9,37 @@ import java.util.*;
 public class FileUtils {
 
     private static final String SCORE_FILE = "src/main/resources/scores.txt";
+    private static final String SAVE_FILE = "src/main/resources/savegame.dat";
 
-    // Charger ou générer une grille selon le niveau
+    public static class GameState {
+        public HitoriGame game;
+        public int seconds;
+        public int moveCount;
+        public String level;
+
+        public GameState(HitoriGame game, int seconds, int moveCount, String level) {
+            this.game = game;
+            this.seconds = seconds;
+            this.moveCount = moveCount;
+            this.level = level;
+        }
+    }
+
+    /**
+     * Charger une grille depuis un fichier
+     */
     public static Grid loadGridFromFile(String level) throws IOException {
         String path = "src/main/resources/grids/grid_" + level.toLowerCase() + ".txt";
         File file = new File(path);
 
         if (!file.exists()) {
-            generateGridFile(level, path);
+            throw new IOException("Fichier de grille introuvable : " + path);
         }
 
         BufferedReader reader = new BufferedReader(new FileReader(file));
         List<int[]> rows = new ArrayList<>();
         String line;
+        
         while ((line = reader.readLine()) != null) {
             String[] tokens = line.trim().split("\\s+");
             int[] row = new int[tokens.length];
@@ -39,67 +59,82 @@ public class FileUtils {
         return grid;
     }
 
-    // Génération automatique d'une grille jouable
-    private static void generateGridFile(String level, String path) throws IOException {
-        int size;
-        switch (level.toLowerCase()) {
-            case "easy": size = 5; break;
-            case "medium": size = 7; break;
-            case "hard": size = 9; break;
-            default: size = 5;
+    /**
+     * Sauvegarder l'état complet de la partie
+     */
+    public static void saveGameState(HitoriGame game, int seconds, int moveCount) throws IOException {
+        File saveDir = new File("src/main/resources");
+        if (!saveDir.exists()) {
+            saveDir.mkdirs();
         }
 
-        int[][] grid = new int[size][size];
-        Random rand = new Random();
-
-        // Génération d'une grille initiale sans doublons par ligne et colonne
-        for (int i = 0; i < size; i++) {
-            List<Integer> numbers = new ArrayList<>();
-            for (int n = 1; n <= size; n++) numbers.add(n);
-            Collections.shuffle(numbers, rand);
-            for (int j = 0; j < size; j++) {
-                grid[i][j] = numbers.get(j);
-            }
-        }
-
-        // Introduire des cases jouables (0) selon difficulté
-        int zeroCount;
-        switch (level.toLowerCase()) {
-            case "easy": zeroCount = size; break;
-            case "medium": zeroCount = size * 2; break;
-            case "hard": zeroCount = size * 3; break;
-            default: zeroCount = size;
-        }
-
-        // Répartition des zéros pour éviter plusieurs dans la même ligne/colonne
-        Set<String> usedPositions = new HashSet<>();
-        for (int z = 0; z < zeroCount; z++) {
-            int i, j;
-            String key;
-            do {
-                i = rand.nextInt(size);
-                j = rand.nextInt(size);
-                key = i + "-" + j;
-            } while (grid[i][j] == 0 || usedPositions.contains(key));
-            grid[i][j] = 0;
-            usedPositions.add(key);
-        }
-
-        // Écriture dans le fichier
-        File dir = new File("src/main/resources/grids");
-        if (!dir.exists()) dir.mkdirs();
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(SAVE_FILE))) {
+            Grid grid = game.getGrid();
+            int size = grid.getSize();
+            
+            // Ligne 1 : Métadonnées
+            writer.println(size + " " + seconds + " " + moveCount);
+            
+            // Lignes suivantes : État de chaque cellule
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
-                    writer.write(grid[i][j] + (j < size - 1 ? " " : ""));
+                    Cell cell = grid.getCell(i, j);
+                    String state = cell.isBlack() ? "B" : "W";
+                    writer.print(cell.getValue() + " " + state);
+                    if (j < size - 1) writer.print(" ");
                 }
-                writer.newLine();
+                writer.println();
             }
         }
     }
 
-    // Sauvegarder un score (en secondes)
+    /**
+     * Charger l'état complet de la partie
+     */
+    public static GameState loadGameState() throws IOException {
+        File saveFile = new File(SAVE_FILE);
+        if (!saveFile.exists()) {
+            return null;
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(saveFile))) {
+            // Lire les métadonnées
+            String[] metadata = reader.readLine().split(" ");
+            int size = Integer.parseInt(metadata[0]);
+            int seconds = Integer.parseInt(metadata[1]);
+            int moveCount = Integer.parseInt(metadata[2]);
+
+            Grid grid = new Grid(size);
+            
+            for (int i = 0; i < size; i++) {
+                String line = reader.readLine();
+                String[] tokens = line.split(" ");
+                
+                for (int j = 0; j < size; j++) {
+                    int value = Integer.parseInt(tokens[j * 2]);
+                    String state = tokens[j * 2 + 1];
+                    
+                    grid.setCell(i, j, value);
+                    Cell cell = grid.getCell(i, j);
+                    
+                    if (state.equals("B")) {
+                        cell.setState(Cell.State.BLACK);
+                    }
+                }
+            }
+
+            HitoriGame game = new HitoriGame();
+            game.setGrid(grid);
+
+            String level = size == 5 ? "easy" : size == 7 ? "medium" : "hard";
+
+            return new GameState(game, seconds, moveCount, level);
+        }
+    }
+
+    /**
+     * Sauvegarder un score
+     */
     public static void saveScore(int score) {
         List<Integer> scores = loadTopScores(10);
         scores.add(score);
@@ -108,17 +143,26 @@ public class FileUtils {
             scores = scores.subList(0, 10);
         }
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(SCORE_FILE))) {
+        try {
+            File scoreDir = new File("src/main/resources");
+            if (!scoreDir.exists()) {
+                scoreDir.mkdirs();
+            }
+
+            BufferedWriter writer = new BufferedWriter(new FileWriter(SCORE_FILE));
             for (Integer s : scores) {
                 writer.write(s.toString());
                 writer.newLine();
             }
+            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    // Charger les meilleurs scores
+    /**
+     * Charger les meilleurs scores
+     */
     public static List<Integer> loadTopScores(int limit) {
         List<Integer> scores = new ArrayList<>();
         File file = new File(SCORE_FILE);

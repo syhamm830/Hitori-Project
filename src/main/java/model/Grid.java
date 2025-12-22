@@ -34,7 +34,7 @@ public class Grid {
 
     /**
      * Règle 1 : Aucune ligne ni colonne ne doit contenir de doublons 
-     * parmi les chiffres visibles (cases blanches non jouables)
+     * parmi les chiffres visibles (cases blanches)
      */
     private boolean checkNoDuplicates() {
         // Vérifier les lignes
@@ -42,15 +42,12 @@ public class Grid {
             Set<Integer> seenInRow = new HashSet<>();
             for (int j = 0; j < size; j++) {
                 Cell cell = getCell(i, j);
-                // On compte uniquement les cellules blanches avec valeur fixe
-                if (cell.isWhite() && !cell.isPlayable()) {
-                    int value = cell.getValue();
-                    if (value > 0) { // Ignorer les 0
-                        if (seenInRow.contains(value)) {
-                            return false; // Doublon trouvé
-                        }
-                        seenInRow.add(value);
+                if (cell.isWhite()) {
+                    if (seenInRow.contains(cell.getValue())) {
+                        System.out.println("❌ Doublon trouvé en ligne " + i + " : " + cell.getValue());
+                        return false;
                     }
+                    seenInRow.add(cell.getValue());
                 }
             }
         }
@@ -60,19 +57,17 @@ public class Grid {
             Set<Integer> seenInCol = new HashSet<>();
             for (int i = 0; i < size; i++) {
                 Cell cell = getCell(i, j);
-                // On compte uniquement les cellules blanches avec valeur fixe
-                if (cell.isWhite() && !cell.isPlayable()) {
-                    int value = cell.getValue();
-                    if (value > 0) { // Ignorer les 0
-                        if (seenInCol.contains(value)) {
-                            return false; // Doublon trouvé
-                        }
-                        seenInCol.add(value);
+                if (cell.isWhite()) {
+                    if (seenInCol.contains(cell.getValue())) {
+                        System.out.println("❌ Doublon trouvé en colonne " + j + " : " + cell.getValue());
+                        return false;
                     }
+                    seenInCol.add(cell.getValue());
                 }
             }
         }
 
+        System.out.println("✅ Pas de doublons");
         return true;
     }
 
@@ -84,31 +79,31 @@ public class Grid {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (getCell(i, j).isBlack()) {
-                    // Vérifier en haut
                     if (i > 0 && getCell(i - 1, j).isBlack()) {
+                        System.out.println("❌ Cases noires adjacentes trouvées en (" + i + "," + j + ")");
                         return false;
                     }
-                    // Vérifier en bas
                     if (i < size - 1 && getCell(i + 1, j).isBlack()) {
+                        System.out.println("❌ Cases noires adjacentes trouvées en (" + i + "," + j + ")");
                         return false;
                     }
-                    // Vérifier à gauche
                     if (j > 0 && getCell(i, j - 1).isBlack()) {
+                        System.out.println("❌ Cases noires adjacentes trouvées en (" + i + "," + j + ")");
                         return false;
                     }
-                    // Vérifier à droite
                     if (j < size - 1 && getCell(i, j + 1).isBlack()) {
+                        System.out.println("❌ Cases noires adjacentes trouvées en (" + i + "," + j + ")");
                         return false;
                     }
                 }
             }
         }
+        System.out.println("✅ Pas de cases noires adjacentes");
         return true;
     }
 
     /**
-     * Règle 3 : Les cases blanches restantes doivent former 
-     * un seul bloc connexe
+     * Règle 3 : Les cases blanches doivent former un seul bloc connexe
      */
     private boolean checkConnectedWhiteCells() {
         boolean[][] visited = new boolean[size][size];
@@ -126,82 +121,65 @@ public class Grid {
             }
         }
 
-        // Si aucune case blanche n'existe (peu probable), c'est valide
         if (startRow == -1) {
-            return true;
+            System.out.println("❌ Aucune case blanche trouvée");
+            return false;
         }
 
-        // Parcours en profondeur depuis la première case blanche
         dfs(startRow, startCol, visited);
 
-        // Vérifier que toutes les cases blanches ont été visitées
+        int totalWhite = 0;
+        int visitedWhite = 0;
+        
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                if (getCell(i, j).isWhite() && !visited[i][j]) {
-                    return false; // Une case blanche n'est pas connectée
+                if (getCell(i, j).isWhite()) {
+                    totalWhite++;
+                    if (visited[i][j]) {
+                        visitedWhite++;
+                    } else {
+                        System.out.println("❌ Case blanche non connectée en (" + i + "," + j + ")");
+                    }
                 }
             }
         }
 
-        return true;
+        System.out.println("📊 Cases blanches : " + visitedWhite + "/" + totalWhite + " connectées");
+        return totalWhite == visitedWhite;
     }
 
-    /**
-     * Parcours en profondeur (DFS) pour vérifier la connexité
-     */
     private void dfs(int row, int col, boolean[][] visited) {
-        // Vérifier les limites
         if (row < 0 || col < 0 || row >= size || col >= size) {
             return;
         }
 
-        // Si déjà visité ou case noire, arrêter
         if (visited[row][col] || getCell(row, col).isBlack()) {
             return;
         }
 
-        // Marquer comme visité
         visited[row][col] = true;
 
-        // Explorer les 4 directions
-        dfs(row - 1, col, visited); // Haut
-        dfs(row + 1, col, visited); // Bas
-        dfs(row, col - 1, visited); // Gauche
-        dfs(row, col + 1, visited); // Droite
+        dfs(row - 1, col, visited);
+        dfs(row + 1, col, visited);
+        dfs(row, col - 1, visited);
+        dfs(row, col + 1, visited);
     }
 
     /**
-     * Vérifie si un coup est valide (utilisé pour empêcher les coups invalides)
+     * Vérifie si un coup est valide avant de le jouer
      */
     public boolean isMoveValid(int row, int col) {
         Cell cell = getCell(row, col);
         
-        // La cellule doit être jouable
-        if (!cell.isPlayable()) {
-            return false;
-        }
-
-        // Si la cellule est noire, vérifier qu'elle n'est pas adjacente à une autre noire
         if (cell.isBlack()) {
-            // Vérifier les 4 directions
+            // Vérifier qu'elle n'est pas adjacente à une autre noire
             if (row > 0 && getCell(row - 1, col).isBlack()) return false;
             if (row < size - 1 && getCell(row + 1, col).isBlack()) return false;
             if (col > 0 && getCell(row, col - 1).isBlack()) return false;
             if (col < size - 1 && getCell(row, col + 1).isBlack()) return false;
         }
 
-        // Vérifier que les cases blanches restent connectées
-        // (Optionnel : cette vérification peut être trop stricte pendant le jeu)
-        // On peut la désactiver et ne vérifier qu'à la fin
-        
         return true;
-    }
-
-    /**
-     * Méthode publique pour vérifier la connexité des cases blanches
-     */
-    public boolean areAllWhiteCellsConnected() {
-        return checkConnectedWhiteCells();
     }
 
     /**
@@ -234,25 +212,22 @@ public class Grid {
         return count;
     }
 
-    /**
-     * Affiche la grille en mode console (utile pour debug)
-     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+        sb.append("\n=== État de la grille ===\n");
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 Cell cell = getCell(i, j);
                 if (cell.isBlack()) {
-                    sb.append(" X ");
-                } else if (cell.isPlayable()) {
-                    sb.append(" . ");
+                    sb.append(" ● ");
                 } else {
                     sb.append(" ").append(cell.getValue()).append(" ");
                 }
             }
             sb.append("\n");
         }
+        sb.append("========================\n");
         return sb.toString();
     }
 }

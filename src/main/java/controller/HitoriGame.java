@@ -19,33 +19,41 @@ public class HitoriGame {
         return grid;
     }
 
+    public void setGrid(Grid grid) {
+        this.grid = grid;
+    }
+
+    /**
+     * Noircir ou blanchir une case
+     */
     public void toggleCell(int row, int col) throws InvalidMoveException {
         Cell cell = grid.getCell(row, col);
-        // Seules les cases jouables (0 dans le fichier) peuvent être modifiées
-        if (cell.getValue() == 0) {
-            cell.toggleState();
-            if (!grid.isMoveValid(row, col)) {
-                cell.toggleState(); // annuler le coup
-                throw new InvalidMoveException("Coup invalide : règles Hitori violées !");
-            }
-        } else {
-            throw new InvalidMoveException("Cette case est fixe et ne peut pas être modifiée !");
+        cell.toggleState();
+        
+        // Vérifier si le coup crée des noires adjacentes
+        if (!grid.isMoveValid(row, col)) {
+            cell.toggleState(); // Annuler
+            throw new InvalidMoveException("Coup invalide : deux cases noires ne peuvent pas être adjacentes !");
         }
     }
 
+    /**
+     * Vérifie si le joueur a gagné
+     */
     public boolean isGameWon() {
-        return grid.isValid() && grid.areAllWhiteCellsConnected();
+        return grid.isValid();
     }
 
+    /**
+     * Réinitialiser la grille (toutes les cases deviennent blanches)
+     */
     public void resetGrid() {
         if (grid != null) {
-            for (int i = 0; i < grid.getSize(); i++)
+            for (int i = 0; i < grid.getSize(); i++) {
                 for (int j = 0; j < grid.getSize(); j++) {
-                    Cell cell = grid.getCell(i, j);
-                    if (cell.getValue() == 0) {
-                        cell.setState(Cell.State.WHITE);
-                    }
+                    grid.getCell(i, j).setState(Cell.State.WHITE);
                 }
+            }
         }
     }
 }

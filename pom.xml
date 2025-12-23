@@ -13,41 +13,61 @@
     <name>HitoriGame</name>
 
     <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>21</maven.compiler.source>
-    <maven.compiler.target>21</maven.compiler.target>
-    <javafx.version>21.0.2</javafx.version> <!-- version corrigée -->
-</properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <javafx.version>21.0.2</javafx.version>
+        <junit.version>5.10.1</junit.version>
+    </properties>
 
-<dependencies>
-    <!-- JavaFX modules -->
-    <dependency>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-controls</artifactId>
-        <version>${javafx.version}</version>
-    </dependency>
-    <dependency>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-fxml</artifactId>
-        <version>${javafx.version}</version>
-    </dependency>
-    <dependency>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-graphics</artifactId>
-        <version>${javafx.version}</version>
-    </dependency>
-    <dependency>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-media</artifactId>
-        <version>${javafx.version}</version>
-    </dependency>
-    <dependency>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-web</artifactId>
-        <version>${javafx.version}</version>
-    </dependency>
-</dependencies>
+    <dependencies>
+        <!-- JavaFX modules -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
 
+        <!-- JUnit 5 pour les tests -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
@@ -59,6 +79,13 @@
                 <configuration>
                     <release>21</release>
                 </configuration>
+            </plugin>
+
+            <!-- Maven Surefire plugin pour exécuter les tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.3</version>
             </plugin>
 
             <!-- JavaFX Maven plugin -->

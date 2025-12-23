@@ -17,8 +17,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.Cell;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class GameUI {

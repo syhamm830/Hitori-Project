@@ -110,26 +110,79 @@ Toutes les cases **blanches** doivent former **un seul bloc connecté**. Il doit
 Le projet suit une **architecture MVC stricte** :
 
 ```
-📦 HitoriGame
+📦 Hitori-Project
 │
-├── 📂 model/           # Logique métier
-│   ├── Cell.java       # État d'une case (WHITE/BLACK)
-│   ├── Grid.java       # Grille + validation des 3 règles
-│   └── ScoreEntry.java # Entrée de score
+├── 📂 src/
+│   ├── 📂 main/
+│   │   ├── 📂 java/
+│   │   │   ├── 📂 app/
+│   │   │   │   └── Main.java
+│   │   │   │       # Point d’entrée de l’application JavaFX.
+│   │   │   │       # Initialise la fenêtre principale et lance le jeu.
+│   │   │   │
+│   │   │   ├── 📂 controller/
+│   │   │   │   └── HitoriGame.java
+│   │   │   │       # Contrôleur principal.
+│   │   │   │       # Gère les actions du joueur : clics sur cases, reset, validation de la grille, suivi du chrono et du compteur de coups.
+│   │   │   │
+│   │   │   ├── 📂 model/
+│   │   │   │   ├── Cell.java
+│   │   │   │   │   # Représente une case individuelle de la grille.
+│   │   │   │   │   # Stocke la valeur numérique et l’état (WHITE ou BLACK) et fournit des méthodes pour changer et vérifier l’état.
+│   │   │   │   ├── Grid.java
+│   │   │   │   │   # Représente la grille complète.
+│   │   │   │   │   # Contient la logique de validation des 3 règles Hitori (doublons, cases noires adjacentes, connexité des blanches).
+│   │   │   │   └── ScoreEntry.java
+│   │   │   │       # Modèle pour une entrée de score.
+│   │   │   │       # Stocke les informations d’un joueur : temps, nombre de coups, niveau, et permet la comparaison pour le Top 10.
+│   │   │   │
+│   │   │   ├── 📂 ui/
+│   │   │   │   ├── GameUI.java
+│   │   │   │   │   # Interface principale du jeu.
+│   │   │   │   │   # Affiche la grille, gère les boutons, le chrono et les animations (victoire, confettis, feedback instantané).
+│   │   │   │   ├── LevelSelectorUI.java
+│   │   │   │   │   # Menu de sélection des niveaux.
+│   │   │   │   │   # Permet de choisir Facile, Moyen ou Difficile et de lancer la grille correspondante.
+│   │   │   │   └── ScoreBoardUI.java
+│   │   │   │       # Interface d’affichage des scores.
+│   │   │   │       # Affiche le Top 10, les médailles et permet de consulter les performances passées.
+│   │   │   │
+│   │   │   ├── 📂 util/
+│   │   │   │   └── FileUtils.java
+│   │   │   │       # Classe utilitaire pour la gestion des fichiers.
+│   │   │   │       # Lecture/écriture des grilles, sauvegardes de parties, et stockage persistant des scores.
+│   │   │   │
+│   │   │   └── 📂 exception/
+│   │   │       └── InvalidMoveException.java
+│   │   │           # Exception métier levée lorsqu’un coup est invalide.
+│   │   │           # Par exemple : deux cases noires adjacentes ou tentative de violation des règles Hitori.
+│   │   │
+│   │   └── 📂 resources/
+│   │       ├── 📂 grids/
+│   │       │   ├── grid_easy.txt
+│   │       │   ├── grid_medium.txt
+│   │       │   └── grid_hard.txt
+│   │       │       # Fichiers texte contenant les grilles prédéfinies pour chaque niveau.
+│   │       │       # Chaque ligne représente une rangée de la grille.
+│   │       │
+│   │       └── scores.txt
+│   │           # Stockage persistant du Top 10 des scores.
+│   │           # Mis à jour à chaque fin de partie et lu au lancement du jeu.
+│   │
+│   └── 📂 test/
+│       └── 📂 java/
+│           └── 📂 controller/
+│               └── HitoriGameTest.java
+│                   # Tests unitaires (JUnit 5) pour la logique du contrôleur.
+│                   # Vérifie le basculement des cases, la validation des règles et le suivi du score.
 │
-├── 📂 controller/      # Contrôleur
-│   └── HitoriGame.java # Logique de jeu (toggle, reset, win)
+├── pom.xml
+│   # Configuration Maven du projet.
+│   # Déclare les dépendances (JavaFX, JUnit) et les paramètres de build.
 │
-├── 📂 ui/              # Interface graphique
-│   ├── GameUI.java     # Écran de jeu principal
-│   ├── LevelSelectorUI.java  # Menu de sélection
-│   └── ScoreBoardUI.java     # Tableau des scores
-│
-├── 📂 util/            # Utilitaires
-│   └── FileUtils.java  # I/O (grilles, saves, scores)
-│
-└── 📂 exception/
-    └── InvalidMoveException.java  # Exception métier
+└── README.md
+    # Documentation complète du projet (règles, installation, utilisation, architecture, roadmap, FAQ)
+
 ```
 
 ---

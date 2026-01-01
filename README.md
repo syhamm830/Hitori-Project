@@ -145,8 +145,7 @@ Le projet suit une **architecture MVC stricte** :
 
 ```bash
 # 1. Cloner
-git clone https://github.com/votre-username/hitori-game.git
-cd hitori-game
+git clone https://github.com/syhamm830/Hitori-Project.git
 
 # 2. Compiler
 mvn clean compile

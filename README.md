@@ -123,23 +123,28 @@ Le projet suit une **architecture MVC stricte** :
 │   │   │   ├── 📂 controller/
 │   │   │   │   └── HitoriGame.java
 │   │   │   │       # Contrôleur principal.
-│   │   │   │       # Gère les actions du joueur : clics sur cases, reset, validation de la grille, suivi du chrono et du compteur de coups.
+│   │   │   │       # Gère les actions du joueur : clics sur cases, reset, validation de la grille,
+│   │   │   │       # suivi du chrono et du compteur de coups.
 │   │   │   │
 │   │   │   ├── 📂 model/
 │   │   │   │   ├── Cell.java
 │   │   │   │   │   # Représente une case individuelle de la grille.
-│   │   │   │   │   # Stocke la valeur numérique et l’état (WHITE ou BLACK) et fournit des méthodes pour changer et vérifier l’état.
+│   │   │   │   │   # Stocke la valeur numérique et l’état (WHITE ou BLACK) et fournit des méthodes
+│   │   │   │   │   # pour changer et vérifier l’état.
 │   │   │   │   ├── Grid.java
 │   │   │   │   │   # Représente la grille complète.
-│   │   │   │   │   # Contient la logique de validation des 3 règles Hitori (doublons, cases noires adjacentes, connexité des blanches).
+│   │   │   │   │   # Contient la logique de validation des 3 règles Hitori (doublons, cases noires adjacentes,
+│   │   │   │   │   # connexité des blanches) et la vérification de la victoire.
 │   │   │   │   └── ScoreEntry.java
 │   │   │   │       # Modèle pour une entrée de score.
-│   │   │   │       # Stocke les informations d’un joueur : temps, nombre de coups, niveau, et permet la comparaison pour le Top 10.
+│   │   │   │       # Stocke les informations d’un joueur : temps, nombre de coups, niveau,
+│   │   │   │       # et permet la comparaison pour le Top 10.
 │   │   │   │
 │   │   │   ├── 📂 ui/
 │   │   │   │   ├── GameUI.java
 │   │   │   │   │   # Interface principale du jeu.
-│   │   │   │   │   # Affiche la grille, gère les boutons, le chrono et les animations (victoire, confettis, feedback instantané).
+│   │   │   │   │   # Affiche la grille, gère les boutons, le chrono et les animations
+│   │   │   │   │   # (victoire, confettis, feedback instantané).
 │   │   │   │   ├── LevelSelectorUI.java
 │   │   │   │   │   # Menu de sélection des niveaux.
 │   │   │   │   │   # Permet de choisir Facile, Moyen ou Difficile et de lancer la grille correspondante.
@@ -148,9 +153,13 @@ Le projet suit une **architecture MVC stricte** :
 │   │   │   │       # Affiche le Top 10, les médailles et permet de consulter les performances passées.
 │   │   │   │
 │   │   │   ├── 📂 util/
-│   │   │   │   └── FileUtils.java
-│   │   │   │       # Classe utilitaire pour la gestion des fichiers.
-│   │   │   │       # Lecture/écriture des grilles, sauvegardes de parties, et stockage persistant des scores.
+│   │   │   │   ├── FileUtils.java
+│   │   │   │   │   # Classe utilitaire pour la gestion des fichiers.
+│   │   │   │   │   # Lecture/écriture des grilles, sauvegardes de parties, et stockage persistant des scores.
+│   │   │   │   └── TimeUtils.java
+│   │   │   │       # Classe utilitaire pour la gestion du temps.
+│   │   │   │       # Fournit des méthodes pour formater le chrono et convertir les durées
+│   │   │   │       # en affichage lisible (mm:ss) pour l’interface et le stockage des scores.
 │   │   │   │
 │   │   │   └── 📂 exception/
 │   │   │       └── InvalidMoveException.java
@@ -164,6 +173,11 @@ Le projet suit une **architecture MVC stricte** :
 │   │       │   └── grid_hard.txt
 │   │       │       # Fichiers texte contenant les grilles prédéfinies pour chaque niveau.
 │   │       │       # Chaque ligne représente une rangée de la grille.
+│   │       │
+│   │       ├── 📂 styles/
+│   │       │   └── game.css
+│   │       │       # Feuille de style CSS pour l’interface JavaFX.
+│   │       │       # Définit l’apparence des boutons, couleurs des cases, polices et animations.
 │   │       │
 │   │       └── scores.txt
 │   │           # Stockage persistant du Top 10 des scores.
